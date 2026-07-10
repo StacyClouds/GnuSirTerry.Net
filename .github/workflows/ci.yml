@@ -30,11 +30,5 @@ jobs:
             11.0.x
           dotnet-quality: preview
 
-      - name: Restore
-        run: dotnet restore StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj
-        
-      - name: Build
-        run: dotnet build StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --no-restore --configuration Release
-        
       - name: Test
-        run: dotnet test StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --no-build --configuration Release --framework ${{ matrix.tfm }}
+        run: dotnet test StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --configuration Release --framework ${{ matrix.tfm }}
