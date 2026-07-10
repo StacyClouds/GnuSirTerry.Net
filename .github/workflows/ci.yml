@@ -26,4 +26,4 @@ jobs:
           dotnet-quality: preview
 
       - name: Test
-        run: dotnet test StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --configuration Release --framework ${{ matrix.framework }}
+        run: dotnet test StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --configuration Release --framework ${{ matrix.framework }} -p:TargetFramework=${{ matrix.framework }}
