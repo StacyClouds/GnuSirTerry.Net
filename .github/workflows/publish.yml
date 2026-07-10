@@ -12,6 +12,7 @@ on:
 
 permissions:
   id-token: write # This enables GitHub OIDC token generation
+  contents: read
 
 jobs:
   publish:
