@@ -10,15 +10,12 @@ on:
         options: [patch, minor, major]
         default: patch
 
-permissions:
-  id-token: write # This enables GitHub OIDC token generation
-  contents: read
-
 jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -59,15 +56,14 @@ jobs:
           --output ./pkg
           -p:Version=${{ steps.version.outputs.version }}
 
-      - name: NuGet login (OIDC - temp API key)
+      - name: NuGet login (OIDC)
+        id: nuget-login
         uses: NuGet/login@v1
         with:
           user: StacyClouds
 
-      - name: Publish to NuGet
-        run: >
-          dotnet nuget push ./pkg/StacyClouds.GnuSirTerry.Net.${{ steps.version.outputs.version }}.nupkg
-          --source https://api.nuget.org/v3/index.json
+      - name: Push to NuGet
+        run: dotnet nuget push ./pkg/**/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
 
       - name: Tag release
         run: |
