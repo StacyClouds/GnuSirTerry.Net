@@ -10,8 +10,11 @@ jobs:
       matrix:
         include:
           - dotnet-version: '9.0.x'
+            framework: 'net9.0'
           - dotnet-version: '10.0.x'
+            framework: 'net10.0'
           - dotnet-version: '11.0.x'
+            framework: 'net11.0'
     steps:
       - uses: actions/checkout@v4
 
@@ -23,4 +26,4 @@ jobs:
           dotnet-quality: preview
 
       - name: Test
-        run: dotnet test StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --configuration Release --framework ${{ matrix.dotnet-version }}
+        run: dotnet test StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --configuration Release --framework ${{ matrix.framework }}
