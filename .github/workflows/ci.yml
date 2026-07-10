@@ -30,10 +30,6 @@ jobs:
             11.0.x
           dotnet-quality: preview
 
-      - name: Pin SDK version
-        run: |
-          echo '{"sdk":{"version":"${{ matrix.sdk-min }}","rollForward":"latestPatch","allowPrerelease":true}}' > global.json
-
       - name: Restore
         run: dotnet restore StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj
         
