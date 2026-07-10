@@ -56,15 +56,23 @@ jobs:
           --output ./pkg
           -p:Version=${{ steps.version.outputs.version }}
 
+#      - name: NuGet login (OIDC - temp API key)
+#        uses: NuGet/login@v1
+#        with:
+#          user: StacyClouds
+#
+#      - name: Publish to NuGet
+#        run: >
+#          dotnet nuget push ./pkg/StacyClouds.GnuSirTerry.Net.${{ steps.version.outputs.version }}.nupkg
+#          --source https://api.nuget.org/v3/index.json
+
       - name: NuGet login (OIDC - temp API key)
         uses: NuGet/login@v1
         with:
           user: StacyClouds
 
-      - name: Publish to NuGet
-        run: >
-          dotnet nuget push ./pkg/StacyClouds.GnuSirTerry.Net.${{ steps.version.outputs.version }}.nupkg
-          --source https://api.nuget.org/v3/index.json
+      - name: Push to NuGet
+        run: dotnet nuget push ./pkg/**/*.nupkg --source https://api.nuget.org/v3/index.json
 
       - name: Tag release
         run: |
