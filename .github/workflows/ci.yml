@@ -32,10 +32,10 @@ jobs:
           echo '{"sdk":{"version":"${{ matrix.sdk-min }}","rollForward":"latestPatch","allowPrerelease":true}}' > global.json
 
       - name: Restore
-        run: dotnet restore StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --framework ${{ matrix.tfm }}
-
+        run: dotnet restore StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj
+        
       - name: Build
-        run: dotnet build StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --no-restore --configuration Release --framework ${{ matrix.tfm }}
-
+        run: dotnet build StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --no-restore --configuration Release
+        
       - name: Test
         run: dotnet test StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --no-build --configuration Release --framework ${{ matrix.tfm }}
