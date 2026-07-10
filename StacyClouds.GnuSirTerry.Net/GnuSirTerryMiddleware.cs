@@ -10,10 +10,7 @@ public class GnuSirTerryMiddleware(RequestDelegate next)
     {
         context
             .Response
-            .Headers
-            .Add(new KeyValuePair<string, StringValues>(
-                "X-Clacks-Overhead", 
-                "GNU Terry Pratchett"));
+            .Headers["X-Clacks-Overhead"] = "GNU Terry Pratchett";
         
         await next(context);
     }
