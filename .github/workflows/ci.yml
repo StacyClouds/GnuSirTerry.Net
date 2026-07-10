@@ -1,0 +1,29 @@
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - dotnet-version: '9.0.x'
+            framework: 'net9.0'
+          - dotnet-version: '10.0.x'
+            framework: 'net10.0'
+          - dotnet-version: '11.0.x'
+            framework: 'net11.0'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version:
+            ${{ matrix.dotnet-version }}
+          dotnet-quality: preview
+
+      - name: Test
+        run: dotnet test StacyClouds.GnuSirTerry.Net.Tests/StacyClouds.GnuSirTerry.Net.Tests.csproj --configuration Release --framework ${{ matrix.framework }} -p:TargetFrameworks=${{ matrix.framework }}

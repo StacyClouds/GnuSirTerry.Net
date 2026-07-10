@@ -1,0 +1,77 @@
+name: Publish to NuGet
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+
+permissions:
+  id-token: write # This enables GitHub OIDC token generation
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Calculate next version
+        id: version
+        run: |
+          latest=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          latest=${latest#v}
+          if [ -z "$latest" ]; then latest="0.0.0"; fi
+
+          major=$(echo $latest | cut -d. -f1)
+          minor=$(echo $latest | cut -d. -f2)
+          patch=$(echo $latest | cut -d. -f3)
+
+          case "${{ inputs.bump }}" in
+            major) major=$((major+1)); minor=0; patch=0 ;;
+            minor) minor=$((minor+1)); patch=0 ;;
+            patch) patch=$((patch+1)) ;;
+          esac
+
+          echo "version=$major.$minor.$patch" >> $GITHUB_OUTPUT
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '11.0.x'
+          include-prerelease: true
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Test
+        run: dotnet test --configuration Release
+
+      - name: Pack
+        run: >
+          dotnet pack StacyClouds.GnuSirTerry.Net/StacyClouds.GnuSirTerry.Net.csproj
+          --configuration Release
+          --output ./pkg
+          -p:Version=${{ steps.version.outputs.version }}
+
+      - name: NuGet login (OIDC - temp API key)
+        uses: NuGet/login@v1
+        with:
+          user: StacyClouds
+
+      - name: Publish to NuGet
+        run: >
+          dotnet nuget push ./pkg/StacyClouds.GnuSirTerry.Net.${{ steps.version.outputs.version }}.nupkg
+          --source https://api.nuget.org/v3/index.json
+
+      - name: Tag release
+        run: |
+          git tag v${{ steps.version.outputs.version }}
+          git push origin v${{ steps.version.outputs.version }}
