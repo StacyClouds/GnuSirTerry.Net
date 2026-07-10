@@ -29,7 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StacyClouds.GnuSirTerry.Net\StacyClouds.GnuSirTerry.Net.csproj" />
+    <ProjectReference Include="..\StacyClouds.GnuSirTerry.Net\StacyClouds.GnuSirTerry.Net.csproj"
+                      GlobalPropertiesToRemove="TargetFrameworks" />
   </ItemGroup>
 
 </Project>
