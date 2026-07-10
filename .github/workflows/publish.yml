@@ -10,15 +10,12 @@ on:
         options: [patch, minor, major]
         default: patch
 
-permissions:
-  id-token: write # This enables GitHub OIDC token generation
-  contents: read
-
 jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
